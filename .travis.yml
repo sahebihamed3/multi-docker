@@ -1,0 +1,17 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t hamedsa/react-test -f ./client/Dockerfile.dev ./client
+# - docker build API ...
+
+script:
+  - docker run hamedsa/react-test npm test -- --coverage
+# - docker run myAPI ....
+
+after_success:
+  - docker build -t hamedsa/multi-client ./client
+  - docker build -t hamedsa/multi-nginx ./nginx
+  - docker build -t hamedsa/multi-server ./server
+  - docker build -t hamedsa/multi-worker ./worker
